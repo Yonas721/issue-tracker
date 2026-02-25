@@ -20,7 +20,7 @@ export default function NavBar() {
             href="/"
             className={
               currentPath === "/"
-                ? `text-gray-300`
+                ? `text-gray-400`
                 : `hover:text-gray-300 transition-colors`
             }
           >
@@ -32,7 +32,7 @@ export default function NavBar() {
             href="/issues"
             className={
               currentPath === "/issues"
-                ? `text-gray-300`
+                ? `text-gray-400`
                 : `hover:text-red-500 transition-colors`
             }
           >
