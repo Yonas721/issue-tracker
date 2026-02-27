@@ -18,7 +18,7 @@ const adapter = new PrismaMariaDb({
 const prisma = new PrismaClient({ adapter });
 
 const createIssueSchema = z.object({
-  title: z.string().min(1).max(255),
+  title: z.string().min(3).max(255),
   description: z.string().min(1),
 });
 
