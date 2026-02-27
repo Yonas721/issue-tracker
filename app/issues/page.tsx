@@ -1,6 +1,10 @@
-import {  Button } from "@radix-ui/themes";
+import {  Button, Link } from "@radix-ui/themes";
 
 export default function Issues() {
-  return <Button>hello issues</Button>;
+  return (
+    <Button>
+      <Link href="/issues/new">create new issue</Link>
+    </Button>
+  );
 
 }
