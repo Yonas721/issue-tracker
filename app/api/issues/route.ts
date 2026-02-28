@@ -1,22 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/app/generated/prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import {createIssueSchema} from "@/app/validationSchemas"
 
-
-// creating a new adapter instance
-const adapter = new PrismaMariaDb({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  connectionLimit: 5,
-});
-
-
-//passing the instance to prismaclient
-const prisma = new PrismaClient({ adapter });
-
+import { createIssueSchema } from "@/app/validationSchemas";
+import prisma from "@/app/prisma"
 
 
 export async function POST(request: NextRequest) {
@@ -39,3 +24,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newIssue, { status: 201 });
 }
 
+export function GET() {
+  return  prisma.issue.findMany();
+}
