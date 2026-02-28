@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import z from "zod";
+import {createIssueSchema} from "@/app/validationSchemas"
 
 
 // creating a new adapter instance
@@ -17,10 +17,7 @@ const adapter = new PrismaMariaDb({
 //passing the instance to prismaclient
 const prisma = new PrismaClient({ adapter });
 
-const createIssueSchema = z.object({
-  title: z.string().min(3).max(255),
-  description: z.string().min(1),
-});
+
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
