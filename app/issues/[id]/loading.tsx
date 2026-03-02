@@ -1,8 +1,7 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Card, Flex, Heading, Text } from "@radix-ui/themes";
-import IssueStatusBadge from "@/app/components/IssueStatusBadge";
-import ReactMarkdown from "react-markdown";
+import { Card, Flex } from "@radix-ui/themes";
+
 export default function Loading() {
   return (
     <div className="p-6">
