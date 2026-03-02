@@ -1,7 +1,7 @@
-import {  Table } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 import prisma from "@/app/prisma";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
-import ButtonIssue from "./component/ButtonIssue";
+import ButtonIssue from "./_component/ButtonIssue";
 import Link from "next/link";
 
 export default async function Issues() {
@@ -59,8 +59,6 @@ export default async function Issues() {
                         clip-rule="evenodd"
                       ></path>
                     </svg>
-                    
-                  
                   </Link>
                 </Table.Cell>
               </Table.Row>
