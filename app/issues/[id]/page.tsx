@@ -27,13 +27,13 @@ export default async function DetailsPage({
   }
 
   return (
-    <Grid columns={{ initial: "1", md: "2" }}>
-      <Box>
+    <Grid columns={{ initial: "1", sm: "5" }}>
+      <Box className="md:col-span-4">
         <IssueDetailsPage issue={issue} />
       </Box>
 
       <Box>
-        <Flex gap="4" className="">
+        <Flex direction="column" gap="4">
           <EditIssueButton issueId={issue.id} />
           <DeleteIssueButton issueId={issue.id} />
         </Flex>

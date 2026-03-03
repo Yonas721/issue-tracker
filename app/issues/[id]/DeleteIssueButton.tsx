@@ -1,28 +1,89 @@
-import { Button } from "@radix-ui/themes";
-import Link from "next/link";
+"use client";
 
-export default function DeleteIssueButton({issueId}:{issueId:number}){
+import { AlertDialog, Button, Flex } from "@radix-ui/themes";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Spinner from "@/app/components/Spinner";
+export default function DeleteIssueButton({ issueId }: { issueId: number }) {
+  const router = useRouter();
+  const [error, setError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-    return (
- <Link href={`/issues/${issueId}/delete`}>
-            <Button>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5.5 1C5.22386 1 5 1.22386 5 1.5C5 1.77614 5.22386 2 5.5 2H9.5C9.77614 2 10 1.77614 10 1.5C10 1.22386 9.77614 1 9.5 1H5.5ZM3 3.5C3 3.22386 3.22386 3 3.5 3H5H10H11.5C11.7761 3 12 3.22386 12 3.5C12 3.77614 11.7761 4 11.5 4H11V12C11 12.5523 10.5523 13 10 13H5C4.44772 13 4 12.5523 4 12V4L3.5 4C3.22386 4 3 3.77614 3 3.5ZM5 4H10V12H5V4Z"
-                  fill="currentColor"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>{" "}
-              Delete issue
-            </Button>
-          </Link>
-    );
+  const deleteIssue = async () => {
+    try {
+      setIsDeleting(true);
+      await axios.delete("/api/issues/" + issueId);
+      router.push("/issues");
+      router.refresh();
+    } catch (error) {
+      setIsDeleting(true);
+      setError(true);
+    }
+  };
+  return (
+    <>
+      <AlertDialog.Root>
+        <AlertDialog.Trigger>
+          <Button color="red" className="w-100">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 15 15"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.5 1C5.22386 1 5 1.22386 5 1.5C5 1.77614 5.22386 2 5.5 2H9.5C9.77614 2 10 1.77614 10 1.5C10 1.22386 9.77614 1 9.5 1H5.5ZM3 3.5C3 3.22386 3.22386 3 3.5 3H5H10H11.5C11.7761 3 12 3.22386 12 3.5C12 3.77614 11.7761 4 11.5 4H11V12C11 12.5523 10.5523 13 10 13H5C4.44772 13 4 12.5523 4 12V4L3.5 4C3.22386 4 3 3.77614 3 3.5ZM5 4H10V12H5V4Z"
+                fill="currentColor"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+              ></path>
+            </svg>{" "}
+            Delete issue
+          </Button>
+        </AlertDialog.Trigger>
+        <AlertDialog.Content maxWidth="450px">
+          <AlertDialog.Title>
+            Do you want to delete this issue?
+          </AlertDialog.Title>
+          <AlertDialog.Description size="2">
+            This action cannot be undone. This will permanently delete the issue
+          </AlertDialog.Description>
+
+          <Flex gap="3" mt="4" justify="end">
+            <AlertDialog.Cancel>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </AlertDialog.Cancel>
+            <AlertDialog.Action>
+              <Button variant="solid" color="red" onClick={deleteIssue} disabled={isDeleting}>
+                Delete {isDeleting && <Spinner/>}
+              </Button>
+            </AlertDialog.Action>
+          </Flex>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
+
+      <AlertDialog.Root open={error}>
+        <AlertDialog.Content maxWidth="450px">
+          <AlertDialog.Title>oops!</AlertDialog.Title>
+          <AlertDialog.Description size="2">
+            something has occured,please try again later!
+          </AlertDialog.Description>
+
+          <Button
+            onClick={() => setError(false)}
+            color="gray"
+            variant="soft"
+            mt="4"
+          >
+            {" "}
+            ok
+          </Button>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
+    </>
+  );
 }
-   
