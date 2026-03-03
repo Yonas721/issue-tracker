@@ -4,10 +4,23 @@ import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import Spinner from "@/app/components/Spinner";
 export default function DeleteIssueButton({ issueId }: { issueId: number }) {
   const router = useRouter();
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const deleteIssue = async () => {
+    try {
+      setIsDeleting(true);
+      await axios.delete("/api/issues/" + issueId);
+      router.push("/issues");
+      router.refresh();
+    } catch (error) {
+      setIsDeleting(true);
+      setError(true);
+    }
+  };
   return (
     <>
       <AlertDialog.Root>
@@ -45,21 +58,8 @@ export default function DeleteIssueButton({ issueId }: { issueId: number }) {
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action>
-              <Button
-                variant="solid"
-                color="red"
-                onClick={async () => {
-                  try {
-                    throw new Error();
-                    await axios.delete("/api/issues/" + issueId);
-                    router.push("/issues");
-                    router.refresh();
-                  } catch (error) {
-                    setError(true);
-                  }
-                }}
-              >
-                Delete
+              <Button variant="solid" color="red" onClick={deleteIssue} disabled={isDeleting}>
+                Delete {isDeleting && <Spinner/>}
               </Button>
             </AlertDialog.Action>
           </Flex>
@@ -73,7 +73,12 @@ export default function DeleteIssueButton({ issueId }: { issueId: number }) {
             something has occured,please try again later!
           </AlertDialog.Description>
 
-          <Button onClick={() => setError(false)} color="gray" variant="soft" mt="4">
+          <Button
+            onClick={() => setError(false)}
+            color="gray"
+            variant="soft"
+            mt="4"
+          >
             {" "}
             ok
           </Button>
