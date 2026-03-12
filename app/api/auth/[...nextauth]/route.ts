@@ -5,7 +5,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
-  
   session: { strategy: "jwt" },
   providers: [
     GoogleProvider({
@@ -13,6 +12,14 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    async session({ session, token }) {
+      if (token) {
+        session.user.image = token.picture as string;
+      }
+      return session;
+    },
+  },
 });
 
 

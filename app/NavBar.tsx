@@ -3,14 +3,14 @@ import Link from "next/link";
 import { IoBugSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {  Flex,Container } from "@radix-ui/themes";
+import { Flex, Container, DropdownMenu, Avatar, Text } from "@radix-ui/themes";
 
 export default function NavBar() {
   const { status, data: session } = useSession();
   const currentPath = usePathname();
 
   return (
-    <nav className="border-b h-13 items-center mb-5 px-5 py-5 ">
+    <nav className="border-b  py-4">
       <Container>
         <Flex justify="between">
           <Flex align="center" gap="4">
@@ -47,7 +47,27 @@ export default function NavBar() {
 
           <Flex>
             {status === "authenticated" && (
-              <Link href="/api/auth/signout">Logout</Link>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <button className="cursor-pointer bg-transparent border-none p-0">
+                    <Avatar src={session.user!.image!} fallback="?" size="2" radius="full"/>
+                  </button>
+                </DropdownMenu.Trigger>
+
+
+                <DropdownMenu.Content>
+
+                  <DropdownMenu.Label>
+                    <Text>{session.user!.email}</Text>
+                  </DropdownMenu.Label>
+
+                  <DropdownMenu.Item>
+                    <Link href="/api/auth/signout">Logout</Link>
+                  </DropdownMenu.Item>
+                  
+                </DropdownMenu.Content>
+
+              </DropdownMenu.Root>
             )}
 
             {status === "unauthenticated" && (
