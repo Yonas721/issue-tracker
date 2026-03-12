@@ -15,7 +15,7 @@ const handler = NextAuth({
   callbacks: {
     async session({ session, token }) {
       if (token) {
-        session.user.image = token.picture as string;
+        session!.user!.image = token.picture as string;
       }
       return session;
     },
