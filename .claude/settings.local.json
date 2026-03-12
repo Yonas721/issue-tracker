@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"\nconst { PrismaClient } = require\\('./app/generated/prisma/client'\\);\n\" 2>&1 | head -5)",
+      "Bash(node -e \"\nconst { PrismaClient } = require\\('./app/generated/prisma/client.js'\\);\nconsole.log\\(typeof PrismaClient\\);\n\" 2>&1)"
+    ]
+  }
+}
