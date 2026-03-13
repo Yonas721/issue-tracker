@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { createIssueSchema } from "@/app/validationSchemas";
-import prisma from "@/app/prisma"
-
+import prisma from "@/app/prisma";
+import { authOptions } from "../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
 
 export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if(!session){
+    return NextResponse.json({error:"unauthoried"},{status:401});
+  }
   const body = await request.json();
 
   const validation = createIssueSchema.safeParse(body);
@@ -25,5 +30,5 @@ export async function POST(request: NextRequest) {
 }
 
 export function GET() {
-  return  prisma.issue.findMany();
+  return prisma.issue.findMany();
 }
