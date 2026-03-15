@@ -6,7 +6,9 @@ import Skeleton from "react-loading-skeleton";
 import { useSession } from "next-auth/react";
 
 export default function SessionStatus() {
+  
   const { status, data: session } = useSession();
+
   if (status === "loading") {
     return <Skeleton width="2rem" height="2rem" circle />;
   } else if (status === "authenticated") {
