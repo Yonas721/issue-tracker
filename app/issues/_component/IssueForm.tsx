@@ -20,9 +20,11 @@ import { Issue } from "@/app/generated/prisma/client";
 type FormData = z.infer<typeof createIssueSchema>;
 
 export default function IssueForm({issue}:{issue?:Issue}) {
+
   const [isSubmitting, setIsSubmmiting] = useState(false);
 
   const router = useRouter();
+  
   const {
     register,
     control,
