@@ -1,6 +1,7 @@
+import LatestIssue from "./LatestIssue";
 
 export default function Home() {
   return (
-   <p>holaaaaaaaaa</p>
+  <LatestIssue/>
   );
 }
