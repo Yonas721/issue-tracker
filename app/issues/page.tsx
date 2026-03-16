@@ -5,36 +5,57 @@ import ButtonIssue from "./_component/ButtonIssue";
 import Link from "next/link";
 import { Status } from "../generated/prisma/client";
 
-export default async function Issues({
-  searchParams,
-}: {
-  searchParams: Promise<{ status: Status }>;
-}) {
-  
-  const { status } = await searchParams;
+interface Props {
+  searchParams: Promise<{ status: Status; orderBy: string }>;
+}
+
+export default async function Issues({ searchParams }: Props) {
+  const { status, orderBy } = await searchParams;
 
   //reference for our validation
   const statuses = Object.values(Status);
+  const orders = Object.values(["title", "created_at", "status"]);
 
+  const order = orders.includes(orderBy) ? orderBy : undefined;
   const stat = statuses.includes(status) ? status : undefined;
 
   const issues = await prisma.issue.findMany({
     where: { status: stat },
+    orderBy: order ? { [order]: "asc" } : undefined,
   });
 
+  const headers = [
+    { label: "Issues", value: "title" },
+    { label: "Status", value: "status", className: "hidden md:table-cell" },
+    {
+      label: "Created",
+      value: "created_at",
+      className: "hidden md:table-cell",
+    },
+  ];
   return (
     <div>
       <ButtonIssue />
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issues</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
-            </Table.ColumnHeaderCell>
+            {headers.map((header) => (
+              <Table.ColumnHeaderCell
+                key="header.value"
+                className={header.className}
+              >
+                <Link
+                  href={
+                    header.value
+                      ? `/issues/?orderBy=${header.value} ${stat ? `&status=${stat}` : ""}`
+                      : ""
+                  }
+                >
+                  {header.label}
+                </Link>
+              </Table.ColumnHeaderCell>
+            ))}
+
             <Table.ColumnHeaderCell className="hidden md:table-cell">
               Actions
             </Table.ColumnHeaderCell>
