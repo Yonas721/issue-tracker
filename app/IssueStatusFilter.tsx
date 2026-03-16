@@ -1,6 +1,6 @@
 "use client";
 import { Select } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function IssueStatusFilter() {
   const router = useRouter();
@@ -12,13 +12,19 @@ export default function IssueStatusFilter() {
     { label: "In progress", value: "IN_PROGRESS" },
   ];
 
- 
+  const searchParams = useSearchParams();
 
   return (
     <Select.Root
+      defaultValue={searchParams.get("status") || "all"}
       onValueChange={(status) => {
-        const query = status !== "all" ? `?status=${status}` : "";
-        router.push("/issues" + query);
+        const params = new URLSearchParams();
+        if (status) params.append("status", status);
+        if (searchParams.get("orderBy"))
+          params.append("orderBy", searchParams.get("orderBy")!);
+
+        const query = params.toString();
+        router.push("/issues/?" + query);
       }}
     >
       <Select.Trigger
