@@ -3,9 +3,24 @@ import prisma from "@/app/prisma";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import ButtonIssue from "./_component/ButtonIssue";
 import Link from "next/link";
+import { Status } from "../generated/prisma/client";
 
-export default async function Issues() {
-  const issues = await prisma.issue.findMany();
+export default async function Issues({
+  searchParams,
+}: {
+  searchParams: Promise<{ status: Status }>;
+}) {
+  
+  const { status } = await searchParams;
+
+  //reference for our validation
+  const statuses = Object.values(Status);
+
+  const stat = statuses.includes(status) ? status : undefined;
+
+  const issues = await prisma.issue.findMany({
+    where: { status: stat },
+  });
 
   return (
     <div>
