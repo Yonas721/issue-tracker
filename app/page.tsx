@@ -4,7 +4,9 @@ import IssueSummary from "./IssueSummary";
 import LatestIssue from "./LatestIssue";
 import prisma from "./prisma";
 
+
 export default async function Home() {
+  
   const open = await prisma.issue.count({
     where: { status: "OPEN" },
   });
