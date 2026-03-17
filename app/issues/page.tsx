@@ -1,17 +1,17 @@
-import { Table } from "@radix-ui/themes";
+import { Box, Flex, Table } from "@radix-ui/themes";
 import prisma from "@/app/prisma";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 import ButtonIssue from "./_component/ButtonIssue";
 import Link from "next/link";
 import { Status } from "../generated/prisma/client";
+import Pagination from "../components/Pagination";
 
 interface Props {
-  searchParams: Promise<{ status: Status; orderBy: string }>;
+  searchParams: Promise<{ status: Status; orderBy: string; page: string }>;
 }
 
 export default async function Issues({ searchParams }: Props) {
-  const { status, orderBy } = await searchParams;
-
+  const { status, orderBy, page: actualPage } = await searchParams;
   //reference for our validation
   const statuses = Object.values(Status);
   const orders = Object.values(["title", "created_at", "status"]);
@@ -19,9 +19,18 @@ export default async function Issues({ searchParams }: Props) {
   const order = orders.includes(orderBy) ? orderBy : undefined;
   const stat = statuses.includes(status) ? status : undefined;
 
+  const page = parseInt(actualPage) || 1;
+  const pageSize = 10;
+
+  const itemCount = await prisma.issue.count({
+    where: { status: stat },
+  });
+
   const issues = await prisma.issue.findMany({
     where: { status: stat },
     orderBy: order ? { [order]: "asc" } : undefined,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   });
 
   const headers = [
@@ -34,7 +43,7 @@ export default async function Issues({ searchParams }: Props) {
     },
   ];
   return (
-    <div>
+    <Flex direction="column">
       <ButtonIssue />
       <Table.Root variant="surface">
         <Table.Header>
@@ -102,6 +111,13 @@ export default async function Issues({ searchParams }: Props) {
           })}
         </Table.Body>
       </Table.Root>
-    </div>
+      <Box className="mt-4 ">
+        <Pagination
+          itemsCount={itemCount}
+          pageSize={pageSize}
+          currentPage={page}
+        />
+      </Box>
+    </Flex>
   );
 }
