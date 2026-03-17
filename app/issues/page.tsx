@@ -5,6 +5,7 @@ import ButtonIssue from "./_component/ButtonIssue";
 import Link from "next/link";
 import { Status } from "../generated/prisma/client";
 import Pagination from "../components/Pagination";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: Promise<{ status: Status; orderBy: string; page: string }>;
@@ -121,3 +122,8 @@ export default async function Issues({ searchParams }: Props) {
     </Flex>
   );
 }
+
+export const metadata: Metadata = {
+  title: "all issues",
+  description: "list down all the issues",
+};

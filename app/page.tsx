@@ -3,7 +3,7 @@ import IssueBar from "./IssueBar";
 import IssueSummary from "./IssueSummary";
 import LatestIssue from "./LatestIssue";
 import prisma from "./prisma";
-
+import { Metadata } from "next";
 
 export default async function Home() {
   const open = await prisma.issue.count({
@@ -20,7 +20,6 @@ export default async function Home() {
 
   return (
     <>
-      
       <Grid columns={{ initial: "1", md: "2" }} gap="5">
         <Flex direction="column" gap="5">
           <IssueSummary open={open} closed={closed} inProgress={inProgress} />
@@ -32,3 +31,7 @@ export default async function Home() {
     </>
   );
 }
+export const metadata: Metadata = {
+  title: "issue tracker- web app",
+  description: "web app built for tracking issues in software development",
+};
