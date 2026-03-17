@@ -13,7 +13,6 @@ export default function AssignIssue({ issue }: { issue: number }) {
   const { data: users, error, isLoading } = useUsers();
 
   if (error) return null;
-
   if (isLoading) return <Skeleton />;
 
   const assignTask = async (userId: string) => {

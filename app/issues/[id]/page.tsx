@@ -23,7 +23,6 @@ export default async function DetailsPage({
 
   const issue = await prisma.issue.findUnique({
     // we are parsing the id becuase it comes as a string
-
     where: { id: parseInt(id) },
   });
 
