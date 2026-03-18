@@ -6,16 +6,14 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
-
   if (!session) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   // the new data
   const body = await request.json();
-
   const validation = patchIssueSchema.safeParse(body);
 
   if (!validation.success) {
@@ -32,6 +30,7 @@ export async function PATCH(
     if (!user) {
       return NextResponse.json({ error: "invalid user" });
     }
+
   }
 
   const { id } = await params;
