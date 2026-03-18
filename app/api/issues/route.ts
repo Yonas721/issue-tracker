@@ -31,9 +31,3 @@ export async function POST(request: NextRequest) {
 
 
 
-// export function async POST(request NextRequest){
-
-//   const body=await request.json()
-//   const status=
-
-// }
