@@ -29,9 +29,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(newIssue, { status: 201 });
 }
 
-export function GET() {
-  return prisma.issue.findMany();
-}
+
 
 // export function async POST(request NextRequest){
 
