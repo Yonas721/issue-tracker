@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Status } from "../generated/prisma/client";
 import Pagination from "../components/Pagination";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 interface Props {
   searchParams: Promise<{ status: Status; orderBy: string; page: string }>;
@@ -113,11 +114,13 @@ export default async function Issues({ searchParams }: Props) {
         </Table.Body>
       </Table.Root>
       <Box className="mt-4 ">
-        <Pagination
-          itemsCount={itemCount}
-          pageSize={pageSize}
-          currentPage={page}
-        />
+        <Suspense>
+          <Pagination
+            itemsCount={itemCount}
+            pageSize={pageSize}
+            currentPage={page}
+          />
+        </Suspense>
       </Box>
     </Flex>
   );
