@@ -6,7 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -20,7 +20,7 @@ export async function PATCH(
     return NextResponse.json(validation.error.format(), { status: 400 });
   }
 
-  const { title, description, assignedToUserId } = body;
+  const { title, description, assignedToUserId,status } = body;
 
   if (assignedToUserId) {
     const user = prisma.user.findUnique({
@@ -30,7 +30,6 @@ export async function PATCH(
     if (!user) {
       return NextResponse.json({ error: "invalid user" });
     }
-
   }
 
   const { id } = await params;
@@ -47,6 +46,7 @@ export async function PATCH(
     data: {
       title,
       description,
+      status,
       assignedToUserId,
     },
   });

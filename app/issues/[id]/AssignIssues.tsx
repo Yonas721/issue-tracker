@@ -3,10 +3,10 @@
 
 import useUsers from "@/app/hooks/useUsers";
 import { Select } from "@radix-ui/themes";
-
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
-import toast, { Toaster } from "react-hot-toast";
+
 import Skeleton from "react-loading-skeleton";
 
 export default function AssignIssue({ issue }: { issue: number }) {
